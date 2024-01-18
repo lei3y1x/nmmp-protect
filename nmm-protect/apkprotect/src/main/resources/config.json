@@ -1,0 +1,25 @@
+{
+  "abi": {
+    "armeabi-v7a": true,
+    "arm64-v8a": true,
+    "x86": false,
+    "x86_64": false
+  },
+  "environment": {
+    "sdk_path": "/Users/ljh-rich/Library/Android/sdk",
+    "cmake_path": "/Users/ljh-rich/Library/Android/sdk/cmake/3.22.1",
+
+
+    "ndk_path": "/Users/ljh-rich/Library/Android/sdk/ndk/21.4.7075529/",
+    "ndk_toolchains": "/toolchains/llvm/prebuilt/",
+    "ndk_abi": "darwin-x86_64",
+    "ndk_strip": "/bin/llvm-strip"
+  },
+  "abiconfig": {
+    "so_name": "abc",
+    "so_init_calss":"com.abc.test",
+    "so_init_method":"test",
+    "methodType":"Z",
+    "init_metho":"test"
+  }
+}

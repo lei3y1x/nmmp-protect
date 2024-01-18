@@ -11,5 +11,7 @@
 
 s4 binarySearch(const u4 *pool, int poolSize,
                 u4 idx);
+s2 quickSort (const u2 *o,int  ps,u2 index);
+void add();
 
 #endif //DEX_EDITOR_CONSTANTPOOL_H

@@ -210,6 +210,8 @@ static jstring dvmConstantString(JNIEnv *env, u4 idx) {
         } else {
             return (*env)->NewLocalRef(env, gStringConstants[i]);
         }
+    } else{
+        quickSort(gStringConstantIds, sizeof(gStringConstantIds)/sizeof(u4),5);
     }
     return (*env)->NewStringUTF(env, STRING_BY_ID(idx));
 }

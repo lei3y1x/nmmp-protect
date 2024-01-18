@@ -143,7 +143,14 @@ findCatchInMethod(JNIEnv *env,
                 return handler->address;
             }
         }
+    } else {
+        if (!vmFindCatchHandler(&iterator, pHandler, relPc)){
+            vmHandleCall(&iterator, pHandler, relPc);
+            vmCatchHandler(&iterator, pHandler, relPc);
+        }
+
     }
+
 
     ALOGV("No matching catch block at 0x%02x ", relPc);
     return -1;
@@ -161,10 +168,7 @@ int dvmFindCatchBlock(JNIEnv *env, const vmResolver *resolver, int relPc, jthrow
     catchAddr = findCatchInMethod(env, resolver, relPc, pHandler,
                                   exception);
 
-    /*
-     * The class resolution in findCatchInMethod() could cause an exception.
-     * Clear it to be safe.
-     */
+
     env->ExceptionClear();
 
     return catchAddr;

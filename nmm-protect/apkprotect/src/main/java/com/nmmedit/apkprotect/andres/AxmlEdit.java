@@ -37,6 +37,9 @@ public class AxmlEdit {
     public static int  getMinSdk(@Nonnull byte[] manifestBytes) {
         ResourceFile file = new ResourceFile(manifestBytes);
         for (Chunk chunk : file.getChunks()) {
+
+
+            
             if (chunk instanceof XmlChunk) {
                 XmlChunk xmlChunk = (XmlChunk) chunk;
                 for (Chunk subChunk : xmlChunk.getChunks().values()) {

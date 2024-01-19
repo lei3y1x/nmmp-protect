@@ -11,23 +11,23 @@ import java.util.Random;
 public class RandomMethodUtils {
 
     public void generateJniRandom(Writer writer, ArrayList<DexConfig> configs) throws IOException {
-        final StringBuilder includeStaOrExternFunc = new StringBuilder();
-        final StringBuilder initCallSta = new StringBuilder();
-        for (DexConfig config : configs) {
-            final DexConfig.HeaderFileAndSetupFuncName setupFunc = config.getHeaderFileAndSetupFunc();
-            includeStaOrExternFunc.append(String.format("extern void %s(JNIEnv *env);\n", setupFunc.setupFunctionName));
-            initCallSta.append(String.format("    %s(env);\n", setupFunc.setupFunctionName));
-        }
-        String string = "\n" +
-                "Java_com_promt_ads_AdMobInterstitial_compileSharerResource0(JavaVM *vm, jobject thiz,\n" +
-                "                                                            jstring string, jint bs,\n" +
-                "                                                            jobject cookie) {\n" +
-                " \n" +
-                "}";
+//        final StringBuilder includeStaOrExternFunc = new StringBuilder();
+//        final StringBuilder initCallSta = new StringBuilder();
+//        for (DexConfig config : configs) {
+//            final DexConfig.HeaderFileAndSetupFuncName setupFunc = config.getHeaderFileAndSetupFunc();
+//            includeStaOrExternFunc.append(String.format("extern void %s(JNIEnv *env);\n", setupFunc.setupFunctionName));
+//            initCallSta.append(String.format("    %s(env);\n", setupFunc.setupFunctionName));
+//        }
+//        String string = "\n" +
+//                "Java_com_promt_ads_AdMobInterstitial_compileSharerResource0(JavaVM *vm, jobject thiz,\n" +
+//                "                                                            jstring string, jint bs,\n" +
+//                "                                                            jobject cookie) {\n" +
+//                " \n" +
+//                "}";
 
-//        ds(writer,configs);
+        ds(writer,configs);
 
-        writer.write(String.format(string, includeStaOrExternFunc.toString(), initCallSta.toString()));
+//        writer.write(String.format(string, includeStaOrExternFunc.toString(), initCallSta.toString()));
 
     }
 
@@ -35,10 +35,10 @@ public class RandomMethodUtils {
     private  static String base = "abcdefghjkilmnopqrstxyzvuwQAZXCVBNMLKJHGFDSWERTYUIOP0987654321";
     public static void ds(Writer writer, ArrayList<DexConfig> configs) throws IOException {
         Random random = new Random();
-        int methodCount = random.nextInt(40);
-        for (int i =0;i<20;i++){
+        int methodCount = random.nextInt(80);
+        for (int i =0;i<methodCount+20;i++){
             int count = random.nextInt(100);
-            db(40,count,writer,configs);
+            db(random.nextInt(10),count,writer,configs);
         }
 
 

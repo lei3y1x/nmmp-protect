@@ -1,11 +1,16 @@
 package com.nmmedit.apkprotect.andres;
 
 import com.android.aapt.Resources;
+import com.nmmedit.apkprotect.util.FileUtils;
 
 import apk.arsc.*;
 
 import javax.annotation.Nonnull;
+
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 public class AxmlEdit {
@@ -90,6 +95,8 @@ public class AxmlEdit {
     public static byte[] renameApplicationName(@Nonnull byte[] manifestBytes, @Nonnull String newName) throws IOException {
         ResourceFile file = new ResourceFile(manifestBytes);
 
+
+
         boolean modified = false;
         for (Chunk chunk : file.getChunks()) {
             if (chunk instanceof XmlChunk) {
@@ -132,9 +139,12 @@ public class AxmlEdit {
         return "";
     }
 
+
     private static boolean modifyApplicationName(@Nonnull StringPoolChunk stringPoolChunk,
                                                  @Nonnull XmlStartElementChunk startElement,
                                                  @Nonnull String newAppName) {
+
+
         if (startElement.getName().equals("application")) {
             List<XmlAttribute> attributes = startElement.getAttributes();
             //如果之前application节点存在name属性则修改它
@@ -153,7 +163,6 @@ public class AxmlEdit {
 
 //                String extractNativeLibs = attribute.name("extractNativeLibs");
                 if (attribute.name().equals("extractNativeLibs")){
-
                 }
 
 //                android:extractNativeLibs="false"

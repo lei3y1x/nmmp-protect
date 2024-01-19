@@ -12,6 +12,8 @@ extern "C" {
 #endif
 
 
+
+
 typedef struct {
     jint        (*Throw)(JNIEnv*, jthrowable);
     jthrowable  (*ExceptionOccurred)(JNIEnv*);

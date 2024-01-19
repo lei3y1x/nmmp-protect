@@ -31,6 +31,14 @@ typedef struct {
 } TryItem;
 
 typedef struct {
+    s2 startIndex;
+    s4  insnConunt;
+    s2  handlerOff;
+
+
+}Tryindex;
+
+typedef struct {
     u2 triesSize;
     u2 unused;
     /* followed by try_item[triesSize] */
@@ -126,6 +134,11 @@ u4 vmCatchIteratorGetEndOffset(VmCatchIterator *pIterator,
 int vmFindCatchHandlerOffset0(u2 triesSize, const TryItem *pTries,
                               u4 address);
 
+int vmfindCatchHandlerOffsetbool(u2 triesSize,const TryItem *xb,u4 address);
+int vmfindCatchHandlerOfflongset(u2 tSize,const TryItem *xb,u4 address);
+
+
+
 /* Find the handler associated with a given address, if any.
  * Initializes the given iterator and returns true if a match is
  * found. Returns false if there is no applicable handler. */
@@ -164,6 +177,94 @@ DEX_INLINE bool vmFindCatchHandler(VmCatchIterator *pIterator,
 
     if (offset < 0) {
         vmCatchIteratorClear(pIterator); // This squelches warnings.
+        return false;
+    } else {
+        vmCatchIteratorInit(pIterator, pHandler, offset);
+        return true;
+    }
+}
+
+
+DEX_INLINE bool vmCatchHandler(VmCatchIterator *pIterator,TryCatchHandler *pHandler, u4 address) {
+    u2 triesSize = pHandler->triesSize;
+    int offset = -1;
+    TryItem *tries = pHandler->tryItems;
+
+    // Short-circuit the overwhelmingly common cases.
+    switch (triesSize) {
+        case 0: {
+            break;
+        }
+        case 1: {
+            u4 start = tries[0].startAddr;
+
+            if (address < start) {
+                break;
+            }
+
+            u4 end = start + tries[0].insnCount;
+
+            if (address >= end) {
+                break;
+            }
+
+            offset = tries[0].handlerOff;
+            break;
+        }
+        default: {
+            offset = vmfindCatchHandlerOfflongset(triesSize, tries,
+                                               address);
+        }
+
+    }
+
+    if (offset < 0) {
+        vmCatchIteratorClear(pIterator); // This squelches warnings.
+
+        return false;
+    } else {
+        vmCatchIteratorInit(pIterator, pHandler, offset);
+        return true;
+    }
+}
+
+
+DEX_INLINE bool vmHandleCall(VmCatchIterator *pIterator,TryCatchHandler *pHandler, u4 address) {
+    u2 triesSize = pHandler->triesSize;
+    int offset = -1;
+    TryItem *tries = pHandler->tryItems;
+
+    // Short-circuit the overwhelmingly common cases.
+    switch (triesSize) {
+        case 0: {
+            break;
+        }
+        case 1: {
+            u4 start = tries[0].startAddr;
+
+            if (address < start) {
+                break;
+            }
+
+            u4 end = start + tries[0].insnCount;
+
+            if (address >= end) {
+                break;
+            }
+
+            offset = tries[0].handlerOff;
+            break;
+        }
+        default: {
+            offset = vmfindCatchHandlerOfflongset(triesSize, tries,
+                                                  address);
+        }
+
+    }
+
+    if (offset < 0) {
+        vmCatchIteratorClear(pIterator); // This squelches warnings.
+
         return false;
     } else {
         vmCatchIteratorInit(pIterator, pHandler, offset);

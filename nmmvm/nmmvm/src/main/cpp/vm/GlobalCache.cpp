@@ -28,11 +28,11 @@ static jobject getPrimitiveTypeClass(JNIEnv *env, const char *classname) {
 
 //全局异常class
 __attribute__((visibility("default")))
-vmGlobals gVm;
+vmGlobals ggg;
 
 //缓存一些常用的class对象,比如基本类型class对象
 __attribute__((visibility("default")))
-void cacheInitial(JNIEnv *env) {
+void cInital(JNIEnv *env) {
     {
         ScopedLocalRef<jobject> obj(env, getPrimitiveTypeClass(env, "java/lang/Boolean"));
         primitiveBooleanClass = (jclass) env->NewGlobalRef(obj.get());
@@ -69,57 +69,57 @@ void cacheInitial(JNIEnv *env) {
     //取得且缓存全局异常class对象
     {
         ScopedLocalRef<jobject> obj(env, env->FindClass("java/lang/NoClassDefFoundError"));
-        gVm.exNoClassDefFoundError = (jclass) env->NewGlobalRef(obj.get());
+        ggg.exNoClassDefFoundError = (jclass) env->NewGlobalRef(obj.get());
     }
     {
         ScopedLocalRef<jobject> obj(env, env->FindClass("java/lang/NoSuchFieldError"));
-        gVm.exNoSuchFieldError = (jclass) env->NewGlobalRef(obj.get());
+        ggg.exNoSuchFieldError = (jclass) env->NewGlobalRef(obj.get());
     }
     {
         ScopedLocalRef<jobject> obj(env, env->FindClass("java/lang/NoSuchFieldException"));
-        gVm.exNoSuchFieldException = (jclass) env->NewGlobalRef(obj.get());
+        ggg.exNoSuchFieldException = (jclass) env->NewGlobalRef(obj.get());
     }
     {
         ScopedLocalRef<jobject> obj(env, env->FindClass("java/lang/NoSuchMethodError"));
-        gVm.exNoSuchMethodError = (jclass) env->NewGlobalRef(obj.get());
+        ggg.exNoSuchMethodError = (jclass) env->NewGlobalRef(obj.get());
     }
     {
         ScopedLocalRef<jobject> obj(env, env->FindClass("java/lang/NullPointerException"));
-        gVm.exNullPointerException = (jclass) env->NewGlobalRef(obj.get());
+        ggg.exNullPointerException = (jclass) env->NewGlobalRef(obj.get());
     }
     {
         ScopedLocalRef<jobject> obj(env, env->FindClass("java/lang/ArithmeticException"));
-        gVm.exArithmeticException = (jclass) env->NewGlobalRef(obj.get());
+        ggg.exArithmeticException = (jclass) env->NewGlobalRef(obj.get());
     }
     {
         ScopedLocalRef<jobject> obj(env, env->FindClass("java/lang/InternalError"));
-        gVm.exInternalError = (jclass) env->NewGlobalRef(obj.get());
+        ggg.exInternalError = (jclass) env->NewGlobalRef(obj.get());
     }
     {
         ScopedLocalRef<jobject> obj(env, env->FindClass("java/lang/NegativeArraySizeException"));
-        gVm.exNegativeArraySizeException = (jclass) env->NewGlobalRef(obj.get());
+        ggg.exNegativeArraySizeException = (jclass) env->NewGlobalRef(obj.get());
     }
     {
         ScopedLocalRef<jobject> obj(env,
                                     env->FindClass("java/lang/ArrayIndexOutOfBoundsException"));
-        gVm.exArrayIndexOutOfBoundsException = (jclass) env->NewGlobalRef(obj.get());
+        ggg.exArrayIndexOutOfBoundsException = (jclass) env->NewGlobalRef(obj.get());
     }
     {
         ScopedLocalRef<jobject> obj(env, env->FindClass("java/lang/ClassCastException"));
-        gVm.exClassCastException = (jclass) env->NewGlobalRef(obj.get());
+        ggg.exClassCastException = (jclass) env->NewGlobalRef(obj.get());
     }
     {
         ScopedLocalRef<jobject> obj(env, env->FindClass("java/lang/ClassNotFoundException"));
-        gVm.exClassNotFoundException = (jclass) env->NewGlobalRef(obj.get());
+        ggg.exClassNotFoundException = (jclass) env->NewGlobalRef(obj.get());
     }
     {
         ScopedLocalRef<jobject> obj(env, env->FindClass("java/lang/RuntimeException"));
-        gVm.exRuntimeException = (jclass) env->NewGlobalRef(obj.get());
+        ggg.exRuntimeException = (jclass) env->NewGlobalRef(obj.get());
     }
 }
 
 __attribute__((visibility("default")))
-jclass getCacheClass(JNIEnv *env, const char *type) {
+jclass getCC(JNIEnv *env, const char *type) {
     switch (*type) {
         case 'Z':
             return primitiveBooleanClass;

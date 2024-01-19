@@ -95,7 +95,7 @@ jclass dvmResolveClass(JNIEnv *env, u4 idx) {
     jclass clazz;
 
     const char *type = dexStringByTypeIdx(pDex, idx);
-    clazz = getCacheClass(env, type);
+    clazz = getCC(env, type);
     if (clazz != NULL) {
         return (jclass) env->NewLocalRef(clazz);
     }
@@ -126,7 +126,7 @@ jclass dvmFindClass(JNIEnv *env, const char *type) {
     char *clazzName;
     jclass clazz;
 
-    clazz = getCacheClass(env, type);
+    clazz = getCC(env, type);
     if (clazz != NULL) {
         return (jclass) env->NewLocalRef(clazz);
     }
@@ -309,7 +309,7 @@ JNIEXPORT jint Java_com_nmmedit_vm_VmTest_iadd0
             .insnsSize=insnsSize,
             .triesHandlers=NULL
     };
-    jvalue value = vmInterpret(env, &code, &dvmResolver);
+    jvalue value = vmInterVVV(env, &code, &dvmResolver);
 
 
     return value.i;
@@ -339,7 +339,7 @@ JNIEXPORT jlong Java_com_nmmedit_vm_VmTest_ladd0
             .insnsSize=insnsSize,
             .triesHandlers=NULL
     };
-    jvalue value = vmInterpret(env, &code, &dvmResolver);
+    jvalue value = vmInterVVV(env, &code, &dvmResolver);
 
     return value.j;
 }
@@ -367,7 +367,7 @@ JNIEXPORT jint Java_com_nmmedit_vm_VmTest_loop0
             .insnsSize=insnsSize,
             .triesHandlers=NULL
     };
-    jvalue value = vmInterpret(env, &code, &dvmResolver);
+    jvalue value = vmInterVVV(env, &code, &dvmResolver);
 
     return value.i;
 }
@@ -395,7 +395,7 @@ JNIEXPORT jint Java_com_nmmedit_vm_VmTest_sfieldGet0
             .insnsSize=insnsSize,
             .triesHandlers=NULL
     };
-    jvalue value = vmInterpret(env, &code, &dvmResolver);
+    jvalue value = vmInterVVV(env, &code, &dvmResolver);
 
 
     return value.i;
@@ -424,7 +424,7 @@ JNIEXPORT void Java_com_nmmedit_vm_VmTest_setsfield0
             .insnsSize=insnsSize,
             .triesHandlers=NULL
     };
-    vmInterpret(env, &code, &dvmResolver);
+    vmInterVVV(env, &code, &dvmResolver);
 
 }
 JNIEXPORT jint Java_com_nmmedit_vm_VmTest_ifieldGet0
@@ -452,7 +452,7 @@ JNIEXPORT jint Java_com_nmmedit_vm_VmTest_ifieldGet0
             .insnsSize=insnsSize,
             .triesHandlers=NULL
     };
-    jvalue value = vmInterpret(env, &code, &dvmResolver);
+    jvalue value = vmInterVVV(env, &code, &dvmResolver);
 
     return value.i;
 }
@@ -482,7 +482,7 @@ JNIEXPORT void Java_com_nmmedit_vm_VmTest_ifieldPut0
             .insnsSize=insnsSize,
             .triesHandlers=NULL
     };
-    vmInterpret(env, &code, &dvmResolver);
+    vmInterVVV(env, &code, &dvmResolver);
 
 }
 JNIEXPORT jint Java_com_nmmedit_vm_VmTest_packedSwitch0
@@ -508,7 +508,7 @@ JNIEXPORT jint Java_com_nmmedit_vm_VmTest_packedSwitch0
             .insnsSize=insnsSize,
             .triesHandlers=NULL
     };
-    jvalue value = vmInterpret(env, &code, &dvmResolver);
+    jvalue value = vmInterVVV(env, &code, &dvmResolver);
 
 
     return value.i;
@@ -538,7 +538,7 @@ JNIEXPORT jint Java_com_nmmedit_vm_VmTest_aget0
             .insnsSize=insnsSize,
             .triesHandlers=NULL
     };
-    jvalue value = vmInterpret(env, &code, &dvmResolver);
+    jvalue value = vmInterVVV(env, &code, &dvmResolver);
 
     return value.i;
 }
@@ -570,7 +570,7 @@ JNIEXPORT jstring Java_com_nmmedit_vm_VmTest_aput0
             .insnsSize=insnsSize,
             .triesHandlers=NULL
     };
-    jvalue value = vmInterpret(env, &code, &dvmResolver);
+    jvalue value = vmInterVVV(env, &code, &dvmResolver);
 
     return static_cast<jstring>(value.l);
 }
@@ -596,7 +596,7 @@ JNIEXPORT jstring Java_com_nmmedit_vm_VmTest_filledNewArray0
             .insnsSize=insnsSize,
             .triesHandlers=NULL
     };
-    jvalue value = vmInterpret(env, &code, &dvmResolver);
+    jvalue value = vmInterVVV(env, &code, &dvmResolver);
 
     return static_cast<jstring>(value.l);
 }
@@ -670,7 +670,7 @@ JNIEXPORT void Java_com_nmmedit_vm_VmTest_tryCatch0
             .insnsSize=insnsSize,
             .triesHandlers=tryHandler
     };
-    jvalue value = vmInterpret(env, &code, &dvmResolver);
+    jvalue value = vmInterVVV(env, &code, &dvmResolver);
 
 }
 
@@ -707,7 +707,7 @@ JNIEXPORT jstring Java_com_nmmedit_vm_VmTest_invokeVirtual0
             .insnsSize=insnsSize,
             .triesHandlers=NULL
     };
-    jvalue value = vmInterpret(env, &code, &dvmResolver);
+    jvalue value = vmInterVVV(env, &code, &dvmResolver);
 
     return (jstring) value.l;
 }
@@ -738,7 +738,7 @@ JNIEXPORT jboolean Java_com_nmmedit_vm_VmTest_invokeSuper0
             .insnsSize=insnsSize,
             .triesHandlers=NULL
     };
-    jvalue value = vmInterpret(env, &code, &dvmResolver);
+    jvalue value = vmInterVVV(env, &code, &dvmResolver);
 
 
     return value.z;
@@ -766,7 +766,7 @@ JNIEXPORT void Java_com_nmmedit_vm_VmTest_listIter0
             .insnsSize=insnsSize,
             .triesHandlers=NULL
     };
-    jvalue value = vmInterpret(env, &code, &dvmResolver);
+    jvalue value = vmInterVVV(env, &code, &dvmResolver);
 
 }
 JNIEXPORT void Java_com_nmmedit_vm_VmTest_getDay0
@@ -809,7 +809,7 @@ JNIEXPORT jobject Java_com_nmmedit_vm_VmTest_initBitmap0
             .insnsSize=insnsSize,
             .triesHandlers=NULL
     };
-    jvalue value = vmInterpret(env, &code, &dvmResolver);
+    jvalue value = vmInterVVV(env, &code, &dvmResolver);
 
 
     return value.l;
@@ -892,7 +892,7 @@ JNIEXPORT void Java_com_nmmedit_vm_VmTest_throwNull0
             .reg_flags=reg_flags,
             .triesHandlers=NULL
     };
-    jvalue value = vmInterpret(env, &code, &dvmResolver);
+    jvalue value = vmInterVVV(env, &code, &dvmResolver);
 
 }
 
@@ -918,7 +918,7 @@ JNIEXPORT jboolean Java_com_nmmedit_vm_VmTest_constString0
             .reg_flags=reg_flags,
             .triesHandlers=NULL
     };
-    jvalue value = vmInterpret(env, &code, &dvmResolver);
+    jvalue value = vmInterVVV(env, &code, &dvmResolver);
 
     return value.z;
 }
@@ -956,7 +956,7 @@ JNIEXPORT jboolean Java_com_nmmedit_vm_VmTest_constString1
     //替换constString方法
     dvmResolver.dvmConstantString = myConstString;
 
-    jvalue value = vmInterpret(env, &code, &dvmResolver);
+    jvalue value = vmInterVVV(env, &code, &dvmResolver);
 
     return value.z;
 }
@@ -1014,7 +1014,7 @@ JNIEXPORT void Java_com_nmmedit_vm_VmTest_callJna0
     //替换constString方法
     dvmResolver.dvmConstantString = constString2;
 
-    jvalue value = vmInterpret(env, &code, &dvmResolver);
+    jvalue value = vmInterVVV(env, &code, &dvmResolver);
 }
 
 
@@ -1054,7 +1054,7 @@ JNIEXPORT void Java_com_nmmedit_vm_VmTest_agetOutOfBounds0
             .reg_flags=reg_flags,
             .triesHandlers=NULL
     };
-    jvalue value = vmInterpret(env, &code, &dvmResolver);
+    jvalue value = vmInterVVV(env, &code, &dvmResolver);
 
 }
 

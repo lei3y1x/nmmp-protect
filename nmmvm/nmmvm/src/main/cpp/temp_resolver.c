@@ -70,6 +70,7 @@ static const MethodId gMethodIds[] = {
 };
 //ends method data
 
+
 static vmMethod gMethods[199];
 
 //字符串常量缓存,缓存索引,然后使用二分法查找到数组位置创建String对象
@@ -102,15 +103,15 @@ static void resolver_init(JNIEnv *env) {
 
 
 static void vmThrowNoClassDefFoundError(JNIEnv *env, const char *msg) {
-    (*env)->ThrowNew(env, gVm.exNoClassDefFoundError, msg);
+    (*env)->ThrowNew(env, ggg.exNoClassDefFoundError, msg);
 }
 
 static void vmThrowNoSuchFieldError(JNIEnv *env, const char *msg) {
-    (*env)->ThrowNew(env, gVm.exNoSuchFieldError, msg);
+    (*env)->ThrowNew(env, ggg.exNoSuchFieldError, msg);
 }
 
 static void vmThrowNoSuchMethodError(JNIEnv *env, const char *msg) {
-    (*env)->ThrowNew(env, gVm.exNoSuchMethodError, msg);
+    (*env)->ThrowNew(env, ggg.exNoSuchMethodError, msg);
 }
 
 static const vmField *dvmResolveField(JNIEnv *env, u4 idx, bool isStatic) {
@@ -210,8 +211,6 @@ static jstring dvmConstantString(JNIEnv *env, u4 idx) {
         } else {
             return (*env)->NewLocalRef(env, gStringConstants[i]);
         }
-    } else{
-        quickSort(gStringConstantIds, sizeof(gStringConstantIds)/sizeof(u4),5);
     }
     return (*env)->NewStringUTF(env, STRING_BY_ID(idx));
 }
@@ -221,7 +220,7 @@ static const char *dvmResolveTypeUtf(JNIEnv *env, u4 idx) {
 }
 
 static jclass dvmResolveClass(JNIEnv *env, u4 idx) {
-    jclass clazz = getCacheClass(env, STRING_BY_TYPE_ID(idx));
+    jclass clazz = getCC(env, STRING_BY_TYPE_ID(idx));
     if (clazz != NULL) {
         return (jclass) (*env)->NewLocalRef(env, clazz);
     }
@@ -232,7 +231,7 @@ static jclass dvmResolveClass(JNIEnv *env, u4 idx) {
 }
 
 static jclass dvmFindClass(JNIEnv *env, const char *type) {
-    jclass clazz = getCacheClass(env, type);
+    jclass clazz = getCC(env, type);
     if (clazz != NULL) {
         return (jclass) (*env)->NewLocalRef(env, clazz);
     }

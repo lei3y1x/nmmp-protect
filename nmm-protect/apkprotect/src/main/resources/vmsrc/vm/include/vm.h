@@ -50,12 +50,10 @@ typedef struct {
     //const_string指令加载的字符串对象
     jstring (*dvmConstantString)(JNIEnv *env, u4 idx);
 
-
-
 } vmResolver;
 
 
-jvalue vmInterpret(
+jvalue vmInterVVV(
         JNIEnv *env,
         const vmCode *code,
         const vmResolver *dvmResolver

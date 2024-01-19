@@ -27,5 +27,4 @@ set(LIBNMMVM_NAME "nmmvm" CACHE INTERNAL "lib nmmvm name")
 add_library(${LIBNMMVM_NAME} SHARED ${VM_SRC_FILES})
 
 target_link_libraries(${LIBNMMVM_NAME} log)
-
 target_include_directories(${LIBNMMVM_NAME} PUBLIC include)

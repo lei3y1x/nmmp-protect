@@ -1,17 +1,20 @@
 package com.nmmedit.apkprotect.dex2c.converter;
 
 import com.nmmedit.apkprotect.util.ModifiedUtf8;
+
 import org.jf.dexlib2.dexbacked.DexBackedDexFile;
 import org.jf.dexlib2.iface.reference.FieldReference;
 import org.jf.dexlib2.iface.reference.MethodReference;
 import org.jf.dexlib2.util.MethodUtil;
 
 import javax.annotation.Nonnull;
+
 import java.io.IOException;
 import java.io.UTFDataFormatException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * 根据dex生成符号解析代码,比如字符串常量池,类型常量池这些
@@ -37,17 +40,14 @@ public class ResolverCodeGenerator {
         writer.write("#include \"GlobalCache.h\"\n");
         writer.write("#include \"ConstantPool.h\"\n\n");
         writer.write("#include <pthread.h>\n\n\n");
-
-
-
         generateStringPool(writer);
         generateTypePool(writer);
-
         //额外添加的,方便生成结构体
         generateClassNamePool(writer);
         generateSignaturePool(writer);
 
         generateFieldPool(writer);
+
 
         generateMethodPool(writer);
 
@@ -55,6 +55,12 @@ public class ResolverCodeGenerator {
 
         //生成初始化函数及符号解析器结构体
         generateResolver(writer);
+
+
+
+
+
+
     }
 
     //产生const-string*指令对应的缓存
@@ -84,6 +90,10 @@ public class ResolverCodeGenerator {
 
         writer.write(String.format("static jstring gStringConstants[%d];\n\n", constStringIds.length));
     }
+
+
+    //插入增加方法
+
 
     private void generateResolver(Writer writer) throws IOException {
         writer.write("static void resolver_init(JNIEnv *env) {\n" +
@@ -201,6 +211,45 @@ public class ResolverCodeGenerator {
                 "    return method;\n" +
                 "}\n" +
                 "\n" +
+                        "static const vmMethod *dvmResolve(JNIEnv *env, u4 idx, bool isStatic) {\n" +
+                        "    vmMethod *method = &gMethods[idx];\n" +
+                        "    if (method->methodId == NULL) {\n" +
+                        "        MethodId methodId = gMethodIds[idx];\n" +
+                        "\n" +
+                        "        jclass clazz;\n" +
+                        "        FIND_CLASS_BY_NAME(STRING_BY_CLASS_ID(methodId.classIdx));\n" +
+                        "\n" +
+                        "        method->shorty = STRING_BY_ID(methodId.shortyIdx);\n" +
+                        "\n" +
+                        "        method->classIdx = methodId.classIdx;\n" +
+                        "\n" +
+                        "        const char *name = STRING_BY_ID(methodId.nameIdx);\n" +
+                        "        const char *sig = STRING_BY_SIGNATURE_ID(methodId.sigIdx);\n" +
+                        "\n" +
+                        "        jmethodID mid;\n" +
+                        "        if (isStatic) {\n" +
+                        "            mid = (*env)->GetStaticMethodID(env, clazz, name, sig);\n" +
+                        "        } else {\n" +
+                        "            mid = (*env)->GetMethodID(env, clazz, name, sig);\n" +
+                        "        }\n" +
+                        "        if (mid == NULL) {\n" +
+                        "            (*env)->DeleteLocalRef(env, clazz);\n" +
+                        "\n" +
+                        "            (*env)->ExceptionClear(env);\n" +
+                        "            vmThrowNoSuchMethodError(env, name);\n" +
+                        "            return NULL;\n" +
+                        "        }\n" +
+                        "        (*env)->DeleteLocalRef(env, clazz);\n" +
+                        "\n" +
+                        "        //只根据method->methodId判断是否需要解析,最后赋值为了防止结构体解析一半被其他线程使用从而导致错误\n" +
+                        "        //todo 赋值需为原子操作\n" +
+                        "\n" +
+                        "        method->methodId = mid;\n" +
+                        "\n" +
+                        "    }\n" +
+                        "    return method;\n" +
+                        "}\n" +
+                        "\n"+
                 "static pthread_mutex_t str_mutex = PTHREAD_MUTEX_INITIALIZER;\n" +
 
                 "static jstring dvmConstantString(JNIEnv *env, u4 idx) {\n" +
@@ -229,14 +278,15 @@ public class ResolverCodeGenerator {
                 "\n" +
                 "static jclass dvmResolveClass(JNIEnv *env, u4 idx) {\n" +
                 "    jclass clazz = getCC(env, STRING_BY_TYPE_ID(idx));\n" +
-                "    if (clazz != NULL) {\n" +
+                "    if (clazz != NULL) { \n" +
                 "        return (jclass) (*env)->NewLocalRef(env, clazz);\n" +
                 "    }\n" +
                 "\n" +
                 "    FIND_CLASS_BY_NAME(STRING_BY_CLASS_ID(idx));\n" +
                 "\n" +
                 "    return clazz;\n" +
-                "}\n\n");
+                "}\n" +
+                "\n");
 
         //因为类型需要去掉开头的'L'和结尾的';',所以最大最大class名不需要再加1表示字符串结尾
         writer.write(String.format(
@@ -268,9 +318,11 @@ public class ResolverCodeGenerator {
                         "        .dvmResolveClass = dvmResolveClass,\n" +
                         "        .dvmFindClass = dvmFindClass,\n" +
                         "        .dvmConstantString = dvmConstantString,\n" +
+                        "         .dvmResolve = dvmResolve," +
                         "};\n" +
                         "\n");
     }
+
 
     private void generateMethodPool(Writer writer) throws IOException {
         final References references = this.references;
@@ -457,6 +509,9 @@ public class ResolverCodeGenerator {
         writer.write("};\n");
         writer.write("//ends class name ids\n\n");
     }
+
+
+
 
     private void generateSignaturePool(Writer writer) throws IOException {
         writer.write(

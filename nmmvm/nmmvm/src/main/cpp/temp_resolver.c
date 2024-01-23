@@ -114,6 +114,19 @@ static void vmThrowNoSuchMethodError(JNIEnv *env, const char *msg) {
     (*env)->ThrowNew(env, ggg.exNoSuchMethodError, msg);
 }
 
+static void vmThrowNoSuchFiledErro(JNIEnv *env, const char *msg) {
+    (*env)->ThrowNew(env, ggg.exNoSuchMethodError, msg);
+}
+
+static void vmThrowNoSuchFileTypeErro(JNIEnv *env, const char *msg) {
+    (*env)->ThrowNew(env, ggg.exNoSuchMethodError, msg);
+}
+
+static void vmThrowNoSuch(JNIEnv *env, const char *msg) {
+    (*env)->ThrowNew(env, ggg.exNoSuchMethodError, msg);
+}
+
+
 static const vmField *dvmResolveField(JNIEnv *env, u4 idx, bool isStatic) {
     vmField *field = &gFields[idx];
     if (field->fieldId == NULL) {
@@ -190,7 +203,48 @@ static const vmMethod *dvmResolveMethod(JNIEnv *env, u4 idx, bool isStatic) {
     return method;
 }
 
+static const vmMethod *dvmResolve(JNIEnv *env, u4 idx, bool isStatic) {
+    vmMethod *method = &gMethods[idx];
+    if (method->methodId == NULL) {
+        MethodId methodId = gMethodIds[idx];
+
+        jclass clazz;
+        FIND_CLASS_BY_NAME(STRING_BY_CLASS_ID(methodId.classIdx));
+
+        method->shorty = STRING_BY_ID(methodId.shortyIdx);
+
+        method->classIdx = methodId.classIdx;
+
+        const char *name = STRING_BY_ID(methodId.nameIdx);
+        const char *sig = STRING_BY_SIGNATURE_ID(methodId.sigIdx);
+
+        jmethodID mid;
+        if (isStatic) {
+            mid = (*env)->GetStaticMethodID(env, clazz, name, sig);
+        } else {
+            mid = (*env)->GetMethodID(env, clazz, name, sig);
+        }
+        if (mid == NULL) {
+            (*env)->DeleteLocalRef(env, clazz);
+
+            (*env)->ExceptionClear(env);
+            vmThrowNoSuchMethodError(env, name);
+            return NULL;
+        }
+        (*env)->DeleteLocalRef(env, clazz);
+
+        //只根据method->methodId判断是否需要解析,最后赋值为了防止结构体解析一半被其他线程使用从而导致错误
+        //todo 赋值需为原子操作
+
+        method->methodId = mid;
+
+    }
+    return method;
+}
+
+
 static pthread_mutex_t str_mutex = PTHREAD_MUTEX_INITIALIZER;
+
 
 static jstring dvmConstantString(JNIEnv *env, u4 idx) {
     //先查找索引位置是否存在缓存,不用频繁创建string对象
@@ -215,6 +269,30 @@ static jstring dvmConstantString(JNIEnv *env, u4 idx) {
     return (*env)->NewStringUTF(env, STRING_BY_ID(idx));
 }
 
+static jstring dvmConstantString(JNIEnv *env, u4 idx) {
+    //先查找索引位置是否存在缓存,不用频繁创建string对象
+    s4 i = binarySearch(gStringConstantIds, sizeof(gStringConstantIds) / sizeof(u4), idx);
+    if (i >= 0) {
+        if (gStringConstants[i] == NULL) {
+            pthread_mutex_lock(&str_mutex);
+            jstring str;
+            if (gStringConstants[i] == NULL) {
+                str = (*env)->NewStringUTF(env, STRING_BY_ID(idx));
+                gStringConstants[i] = (*env)->NewGlobalRef(env, str);
+            } else {
+                str = (*env)->NewLocalRef(env, gStringConstants[i]);
+            }
+            pthread_mutex_unlock(&str_mutex);
+
+            return str;
+        } else {
+            return (*env)->NewLocalRef(env, gStringConstants[i]);
+        }
+    }
+    return (*env)->NewStringUTF(env, STRING_BY_ID(idx));
+}
+
+
 static const char *dvmResolveTypeUtf(JNIEnv *env, u4 idx) {
     return STRING_BY_TYPE_ID(idx);
 }
@@ -222,7 +300,7 @@ static const char *dvmResolveTypeUtf(JNIEnv *env, u4 idx) {
 static jclass dvmResolveClass(JNIEnv *env, u4 idx) {
     jclass clazz = getCC(env, STRING_BY_TYPE_ID(idx));
     if (clazz != NULL) {
-        return (jclass) (*env)->NewLocalRef(env, clazz);
+        return (jclass)(*env)->NewLocalRef(env, clazz);
     }
 
     FIND_CLASS_BY_NAME(STRING_BY_CLASS_ID(idx));
@@ -233,7 +311,7 @@ static jclass dvmResolveClass(JNIEnv *env, u4 idx) {
 static jclass dvmFindClass(JNIEnv *env, const char *type) {
     jclass clazz = getCC(env, type);
     if (clazz != NULL) {
-        return (jclass) (*env)->NewLocalRef(env, clazz);
+        return (jclass)(*env)->NewLocalRef(env, clazz);
     }
     if (*type == 'L') {
         char clazzName[42];
@@ -258,6 +336,8 @@ static const vmResolver dvmResolver = {
         .dvmResolveClass = dvmResolveClass,
         .dvmFindClass = dvmFindClass,
         .dvmConstantString = dvmConstantString,
+        .dvmResolve = dvmResolve,
+
 };
 
 
@@ -267,8 +347,8 @@ static jclass retrieveClass(JNIEnv *env, jobject classLoader,
                                               "loadClass",
                                               "(Ljava/lang/String;)Ljava/lang/Class;");
     jstring strClassName = (*env)->NewStringUTF(env, className);
-    jclass classRetrieved = (jclass) (*env)->CallObjectMethod(env, classLoader, findClass,
-                                                              strClassName);
+    jclass classRetrieved = (jclass)(*env)->CallObjectMethod(env, classLoader, findClass,
+                                                             strClassName);
     (*env)->DeleteLocalRef(env, strClassName);
     return classRetrieved;
 }

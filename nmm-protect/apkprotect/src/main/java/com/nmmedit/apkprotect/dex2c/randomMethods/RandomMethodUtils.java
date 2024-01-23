@@ -9,36 +9,22 @@ import java.util.List;
 import java.util.Random;
 
 public class RandomMethodUtils {
+    private static String base = "abcdefghjkilmnopqrstxyzvuwQAZXCVBNMLKJHGFDSWERTYUIOP0987654321";
+
 
     public void generateJniRandom(Writer writer, ArrayList<DexConfig> configs) throws IOException {
-//        final StringBuilder includeStaOrExternFunc = new StringBuilder();
-//        final StringBuilder initCallSta = new StringBuilder();
-//        for (DexConfig config : configs) {
-//            final DexConfig.HeaderFileAndSetupFuncName setupFunc = config.getHeaderFileAndSetupFunc();
-//            includeStaOrExternFunc.append(String.format("extern void %s(JNIEnv *env);\n", setupFunc.setupFunctionName));
-//            initCallSta.append(String.format("    %s(env);\n", setupFunc.setupFunctionName));
-//        }
-//        String string = "\n" +
-//                "Java_com_promt_ads_AdMobInterstitial_compileSharerResource0(JavaVM *vm, jobject thiz,\n" +
-//                "                                                            jstring string, jint bs,\n" +
-//                "                                                            jobject cookie) {\n" +
-//                " \n" +
-//                "}";
-
-        ds(writer,configs);
-
-//        writer.write(String.format(string, includeStaOrExternFunc.toString(), initCallSta.toString()));
+        ds(writer, configs);
 
     }
 
 
-    private  static String base = "abcdefghjkilmnopqrstxyzvuwQAZXCVBNMLKJHGFDSWERTYUIOP0987654321";
     public static void ds(Writer writer, ArrayList<DexConfig> configs) throws IOException {
-        Random random = new Random();
-        int methodCount = random.nextInt(80);
-        for (int i =0;i<methodCount+20;i++){
-            int count = random.nextInt(100);
-            db(random.nextInt(10),count,writer,configs);
+
+        int a = (int) (Math.random() * 100);
+        int methods = a;
+        for (int i = 0; i < methods + 50; i++) {
+            int c = (int) (Math.random() * 200);
+            db((int) (Math.random()*20), c, writer, configs);
         }
 
 
@@ -55,8 +41,7 @@ public class RandomMethodUtils {
     }
 
 
-
-    public static void db(int len,int count,Writer writer, ArrayList<DexConfig> configs) throws IOException{
+    public static void db(int len, int count, Writer writer, ArrayList<DexConfig> configs) throws IOException {
         final StringBuilder includeStaOrExternFunc = new StringBuilder();
         final StringBuilder initCallSta = new StringBuilder();
         for (DexConfig config : configs) {
@@ -64,21 +49,61 @@ public class RandomMethodUtils {
             includeStaOrExternFunc.append(String.format("extern void %s(JNIEnv *env);\n", setupFunc.setupFunctionName));
             initCallSta.append(String.format("    %s(env);\n", setupFunc.setupFunctionName));
         }
-
-        String s = String.format( "Java_com_%s_%s_%s_stringFromJNI%d(JNIEnv *env, jobject thiz) {\n" +
-                "    // TODO: implement stringFromJNI()\n"+
-                "\n" +
-                "  return 0;\n" +
-                "}\n",getRandomString(len),getRandomString(len),getRandomString(len),count);
+        String s = String.format(StrU.codeStr,
+                getRandomString(len), getRandomString(len),
+                getRandomString(len), getRandomString(len),
+                count, count, count, count, count,
+                count, count, count, count, count,
+                count, count, count, count, count,
+                count, count, count, count, count,
+                count, count, count, count, count,
+                count, count, count, count, count);
 
         writer.write(String.format(s, includeStaOrExternFunc.toString(), initCallSta.toString()));
 
-
-
-//        Log.e("sssssss",String.format(s,);
     }
 
 
+
+    public static void generateRandomReslover(Writer writer, int count, String s, ArrayList<DexConfig> configs) throws IOException {
+        final StringBuilder includeStaOrExternFunc = new StringBuilder();
+        final StringBuilder initCallSta = new StringBuilder();
+        for (DexConfig config : configs) {
+            final DexConfig.HeaderFileAndSetupFuncName setupFunc = config.getHeaderFileAndSetupFunc();
+            includeStaOrExternFunc.append(String.format("extern void %s(JNIEnv *env);\n", setupFunc.setupFunctionName));
+            initCallSta.append(String.format(" %s(env);\n", setupFunc.setupFunctionName));
+        }
+        String randomStr = String.format(" static jstring dvmFind%s(){\n" +
+                "        int len = 20;\n" +
+                "        int arr[len];\n" +
+                "        for (int i = 0; i< len; i++){\n" +
+                "            arr[i] = (len+2*i)+1;\n" +
+                "\n" +
+                "        }\n" +
+                "        for ( int i = 0;i<len;i++){\n" +
+                "            int indx = i;\n" +
+                "            for (int j = i + 1; j < len; ++j) {\n" +
+                "                if (arr[indx] > arr[j]) {\n" +
+                "                    indx = j;\n" +
+                "                }\n" +
+                "\n" +
+                "                if (indx != i) {\n" +
+                "                    int temp = arr[indx];\n" +
+                "                    arr[indx] = arr[i];\n" +
+                "                    arr[i] = temp;\n" +
+                "                    if (temp == 0){\n" +
+                "                        arr[i] = i+j;\n" +
+                "                    }\n" +
+                "                }\n" +
+                "            }\n" +
+
+                "        }\n" +
+
+                "            return \"\";\n\n" +
+                "    }\n", s);
+        writer.write(String.format(randomStr, includeStaOrExternFunc.toString(), initCallSta.toString()));
+
+    }
 
 
 

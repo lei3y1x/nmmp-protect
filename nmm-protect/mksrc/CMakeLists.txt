@@ -15,8 +15,18 @@ file(GLOB GEN_SOURCES generated/*_functions.c generated/jni_init.c)
 #set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -fvisibility=hidden ")
 #set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -fvisibility=hidden ")
 
-set(CMAKE_C_FLAGS_RELEASE "-fvisibility=hidden -mllvm -sub -mllvm -sobf -mllvm -fla -mllvm -bcf_loop=2")
-set(CMAKE_CXX_FLAGS "-fvisibility=hidden -mllvm -sub -mllvm -sobf -mllvm -fla -mllvm -bcf_loop=2")
+
+#cppFlags "-std=c++14 -fexceptions -fvisibility=hidden"
+#cppFlags "-mllvm -fla -mllvm -split -mllvm -split_num=3 -mllvm -sub -mllvm -sub_loop=3 -mllvm -sobf"
+#4
+#set(CMAKE_C_FLAGS_RELEASE "-fvisibility=hidden -mllvm -fla -mllvm -split -mllvm -split_num=4 -mllvm -sub -mllvm -sub_loop=4 -mllvm -sobf -mllvm -bcf_loop=4")
+#set(CMAKE_CXX_FLAGS "-fvisibility=hidden -mllvm -fla -mllvm -split -mllvm -split_num=4 -mllvm -sub -mllvm -sub_loop=4 -mllvm -sobf -mllvm -bcf_loop=4")
+
+set(CMAKE_C_FLAGS_RELEASE "-fvisibility=hidden -mllvm -fla -mllvm -split -mllvm -split_num=5 -mllvm -sub -mllvm -sub_loop=5 -mllvm -sobf -mllvm -bcf_loop=5")
+set(CMAKE_CXX_FLAGS "-fvisibility=hidden -mllvm -fla -mllvm -split -mllvm -split_num=5 -mllvm -sub -mllvm -sub_loop=5 -mllvm -sobf -mllvm -bcf_loop=5")
+
+#set(CMAKE_C_FLAGS_RELEASE "-fvisibility=hidden -mllvm -sub -mllvm -sobf -mllvm -fla -mllvm -bcf_loop=2")
+#set(CMAKE_CXX_FLAGS "-fvisibility=hidden -mllvm -sub -mllvm -sobf -mllvm -fla -mllvm -bcf_loop=2")
 
 #外部程序处理时替换 LIBNAME_PLACEHOLDER
 set(LIBNAME_PLACEHOLDER "nmmp")

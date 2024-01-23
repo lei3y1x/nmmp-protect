@@ -104,5 +104,9 @@ public class Prefs {
         return config().abiconfig.init_metho;
     }
 
+    public static String VmlibName(){
+        return config().abiconfig.init_vm_so_name;
+    }
+
 
 }

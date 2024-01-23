@@ -16,10 +16,11 @@
     "ndk_strip": "/bin/llvm-strip"
   },
   "abiconfig": {
-    "so_name": "abc",
-    "so_init_calss":"com.abc.test",
-    "so_init_method":"test",
-    "methodType":"Z",
-    "init_metho":"test"
+    "so_name": "shirp",
+    "so_init_calss":"com.rycbvs.Vghs",
+    "so_init_method":"raxas",
+    "methodType":"B",
+    "init_metho":"raxas",
+    "init_vm_so_name": "brjxg"
   }
 }

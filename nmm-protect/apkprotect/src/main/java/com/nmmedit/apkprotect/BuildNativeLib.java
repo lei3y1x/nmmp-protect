@@ -3,9 +3,11 @@ package com.nmmedit.apkprotect;
 import com.android.tools.r8.S;
 import com.nmmedit.apkprotect.data.Prefs;
 import com.nmmedit.apkprotect.util.FileUtils;
+
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
+
 import java.io.*;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -18,7 +20,7 @@ public class BuildNativeLib {
     public static final String NMMP_NAME = Prefs.ndkName();
     //
     //虚拟机库名称,如果cmake里配置为静态库,这个可以忽略
-    public static final String VM_NAME = "nmmvm";
+    public static final String VM_NAME = Prefs.VmlibName();
 
     public static Map<String, Map<File, File>> generateNativeLibs(@Nonnull File outDir,
                                                                   @Nonnull final List<String> abis) throws IOException {
@@ -37,7 +39,6 @@ public class BuildNativeLib {
             ndkHome = Prefs.ndkPath();
             System.err.println("No ANDROID_NDK_HOME. Default is " + ndkHome);
         }
-
 
 
         final Map<String, Map<File, File>> allLibs = new HashMap<>();
@@ -65,13 +66,76 @@ public class BuildNativeLib {
 
 
     //返回RegistMetod 参数类型
-    public static String getMethodType(int id){
-        if (id==1){
-            return "Z";
-        }else {
-            return "(Z)V";
+    public static String getMethodType(int id) {
+       return getTypeString(id);
+
+    }
+
+
+    //返回参数类型
+    private static String getTypeString(int id) {
+        switch (Prefs.ndkMethodType()) {
+            case "Z":
+                if (id == 1) {
+                    return "Z";
+                } else {
+                    return "(Z)V";
+                }
+            case "I":
+                if (id == 1) {
+                    return "I";
+                } else {
+                    return "(I)V";
+                }
+
+
+            case "J":
+                if (id == 1) {
+                    return "J";
+                } else {
+                    return "(J)V";
+                }
+            case "D":
+                if (id == 1) {
+                    return "D";
+                } else {
+                    return "(D)V";
+                }
+
+            case "F":
+                if (id == 1) {
+                    return "F";
+                } else {
+                    return "(F)V";
+                }
+
+            case "B":
+                if (id == 1) {
+                    return "B";
+                } else {
+                    return "(B)V";
+                }
+
+            case "C":
+                if (id == 1) {
+                    return "C";
+                } else {
+                    return "(C)V";
+                }
+
+            case "S":
+                if (id == 1) {
+                    return "S";
+                } else {
+                    return "(S)V";
+                }
+
+            default:
+                break;
         }
 
+
+        return "";
     }
 
     //编译出native lib，同时返回最后的so文件
@@ -220,19 +284,23 @@ public class BuildNativeLib {
         public String getNinjaBinaryPath() {
             return new File(getCmakePath(), "/bin/ninja").getAbsolutePath();
         }
-        public String getSoName(){
+
+        public String getSoName() {
             return Prefs.ndkName();
         }
-        public String getNdkClassName(){
+
+        public String getNdkClassName() {
             return Prefs.ndkClassN();
         }
-        public String getNdkMethodName(){
+
+        public String getNdkMethodName() {
             return Prefs.ndkMethodM();
         }
 
-        public String getAarMethodName(){
+        public String getAarMethodName() {
             return Prefs.AARMethod();
         }
+
         public List<String> getCmakeArguments() {
             return Arrays.asList(
                     getCmakeBinaryPath(),

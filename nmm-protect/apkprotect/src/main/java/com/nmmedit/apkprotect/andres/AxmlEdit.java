@@ -39,7 +39,7 @@ public class AxmlEdit {
         for (Chunk chunk : file.getChunks()) {
 
 
-            
+
             if (chunk instanceof XmlChunk) {
                 XmlChunk xmlChunk = (XmlChunk) chunk;
                 for (Chunk subChunk : xmlChunk.getChunks().values()) {

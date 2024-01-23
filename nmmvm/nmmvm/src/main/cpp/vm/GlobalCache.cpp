@@ -19,6 +19,16 @@ static jclass primitiveFloatClass;
 static jclass primitiveLongClass;
 static jclass primitiveDoubleClass;
 
+//基本参数类型
+//static jclass primitivevoid;
+//static jclass primitiveBool;
+//static jclass primitiveInt;
+//static jclass primitiveLong;
+//static jclass primitiveDouble;
+//static jclass primitiveFloat;
+//static jclass primitiveByte;
+//static jclass primitiveChar;
+//static jclass primitiveShort;
 //得到8个基本类型的class
 static jobject getPrimitiveTypeClass(JNIEnv *env, const char *classname) {
     ScopedLocalRef<jclass> clazz(env, env->FindClass(classname));
@@ -142,6 +152,43 @@ jclass getCC(JNIEnv *env, const char *type) {
     }
 }
 
+
+void getType(JNIEnv *env, const char *type){
+
+    switch (*type) {
+        case 'V':
+
+            break;
+
+        case 'Z':
+
+            break;
+
+        case 'I':
+            break;
+        case 'J':
+
+            break;
+        case 'D':
+            break;
+
+        case 'F':
+            break;
+
+        case 'B':
+            break;
+
+        case 'C':
+            break;
+
+        case 'S':
+            break;
+
+        default:
+            break;
+    }
+
+}
 
 #ifdef __cplusplus
 }

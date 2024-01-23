@@ -37,6 +37,7 @@ typedef struct {
     const vmField *(*dvmResolveField)(JNIEnv *env, u4 idx, bool isStatic);
 
     const vmMethod *(*dvmResolveMethod)(JNIEnv *env, u4 idx, bool isStatic);
+    const vmMethod *(*dvmResolve)(JNIEnv *env, u4 idx, bool isStatic);
 
     //从类型常量池取得类型名
     const char *(*dvmResolveTypeUtf)(JNIEnv *env, u4 idx);

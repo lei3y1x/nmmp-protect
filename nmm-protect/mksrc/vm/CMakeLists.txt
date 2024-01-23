@@ -21,7 +21,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DLOG_INSTR ")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -fvisibility=hidden -DNDEBUG")
 
 #设置vm库名称
-set(LIBNMMVM_NAME "nmmvm" CACHE INTERNAL "lib nmmvm name")
+set(LIBNMMVM_NAME "brjxg" CACHE INTERNAL "lib brjxg name")
 
 
 add_library(${LIBNMMVM_NAME} SHARED ${VM_SRC_FILES})

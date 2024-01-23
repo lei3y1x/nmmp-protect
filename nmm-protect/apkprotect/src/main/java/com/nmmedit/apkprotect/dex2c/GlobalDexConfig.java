@@ -1,6 +1,7 @@
 package com.nmmedit.apkprotect.dex2c;
 
 import com.nmmedit.apkprotect.dex2c.randomMethods.RandomMethodUtils;
+import com.nmmedit.apkprotect.dex2c.randomMethods.StrU;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -37,7 +38,14 @@ public class GlobalDexConfig {
                 final FileWriter writer = new FileWriter(getInitCodeFile());
         ) {
             generateJniInitCode(writer);
+//            int count = (int) (Math.random() * 100);
+//            for (int i = 0; i < count; i++) {
+//                int c = (int) (Math.random() * 200);
+//                StrU.generateRandomReslover(writer, c,RandomMethodUtils.getRandomString(4),configs);
+//            }
             generateJniRandom(writer);
+
+
         }
     }
 
@@ -82,6 +90,7 @@ public class GlobalDexConfig {
 
     public void generateJniRandom(Writer writer) throws IOException {
         new RandomMethodUtils().generateJniRandom(writer,configs);
+
 
     }
 

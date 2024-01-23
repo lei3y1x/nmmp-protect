@@ -15,7 +15,6 @@ JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
     }
     cInital(env);
 
-
     return JNI_VERSION_1_6;
 }
 

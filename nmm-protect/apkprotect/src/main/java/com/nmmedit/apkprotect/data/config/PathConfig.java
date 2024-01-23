@@ -26,4 +26,7 @@ public class PathConfig {
     public String methodType;
     @SerializedName("init_metho")
     public String init_metho;
+
+    @SerializedName("init_vm_so_name")
+    public String init_vm_so_name;
 }

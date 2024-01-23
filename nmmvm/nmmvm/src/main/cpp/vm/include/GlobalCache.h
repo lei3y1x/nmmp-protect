@@ -38,6 +38,9 @@ void cInital(JNIEnv *env);
 jclass getCC(JNIEnv *env, const char *type);
 
 
+void getType(JNIEnv *env ,const char  *type);
+
+
 #ifdef __cplusplus
 }
 #endif

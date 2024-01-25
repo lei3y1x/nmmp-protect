@@ -124,15 +124,15 @@ public class ResolverCodeGenerator {
                 "\n" +
                 "\n" +
                 "static void vmThrowNoClassDefFoundError(JNIEnv *env, const char *msg) {\n" +
-                "    (*env)->ThrowNew(env, ggg.exNoClassDefFoundError, msg);\n" +
+                "    (*env)->ThrowNew(env, campr.exNoClassDefFoundError, msg);\n" +
                 "}\n" +
                 "\n" +
                 "static void vmThrowNoSuchFieldError(JNIEnv *env, const char *msg) {\n" +
-                "    (*env)->ThrowNew(env, ggg.exNoSuchFieldError, msg);\n" +
+                "    (*env)->ThrowNew(env, campr.exNoSuchFieldError, msg);\n" +
                 "}\n" +
                 "\n" +
                 "static void vmThrowNoSuchMethodError(JNIEnv *env, const char *msg) {\n" +
-                "    (*env)->ThrowNew(env, ggg.exNoSuchMethodError, msg);\n" +
+                "    (*env)->ThrowNew(env, campr.exNoSuchMethodError, msg);\n" +
                 "}\n" +
                 "\n" +
                 "static const vmField *dvmResolveField(JNIEnv *env, u4 idx, bool isStatic) {\n" +
@@ -277,7 +277,7 @@ public class ResolverCodeGenerator {
                 "}\n" +
                 "\n" +
                 "static jclass dvmResolveClass(JNIEnv *env, u4 idx) {\n" +
-                "    jclass clazz = getCC(env, STRING_BY_TYPE_ID(idx));\n" +
+                "    jclass clazz = getCam(env, STRING_BY_TYPE_ID(idx));\n" +
                 "    if (clazz != NULL) { \n" +
                 "        return (jclass) (*env)->NewLocalRef(env, clazz);\n" +
                 "    }\n" +
@@ -291,7 +291,7 @@ public class ResolverCodeGenerator {
         //因为类型需要去掉开头的'L'和结尾的';',所以最大最大class名不需要再加1表示字符串结尾
         writer.write(String.format(
                 "static jclass dvmFindClass(JNIEnv *env, const char *type) {\n" +
-                        "    jclass clazz = getCC(env, type);\n" +
+                        "    jclass clazz = getCam(env, type);\n" +
                         "    if (clazz != NULL) {\n" +
                         "        return (jclass) (*env)->NewLocalRef(env, clazz);\n" +
                         "    }\n" +

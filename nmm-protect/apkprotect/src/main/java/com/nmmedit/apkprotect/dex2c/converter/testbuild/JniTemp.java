@@ -20,7 +20,7 @@ public class JniTemp {
             "\n" +
             "    memcpy(tryHandler + 4, tries, size);\n" +
             "\n" +
-            "    jvalue value = dvmInterVVV(env, insns, insnsSize, regs, (const u1 *) tryHandler, &dvmResolver);\n" +
+            "    jvalue value = dvmcam(env, insns, insnsSize, regs, (const u1 *) tryHandler, &dvmResolver);\n" +
             "    free(tryHandler);\n" +
             "\n";
 

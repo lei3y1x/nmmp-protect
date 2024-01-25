@@ -204,7 +204,7 @@ public class JniCodeGenerator {
                         "            .triesHandlers=tries\n" +
                         "    };\n" +
                         "\n" +
-                        "    jvalue value = vmInterVVV(env,\n" +
+                        "    jvalue value = vmcam(env,\n" +
                         "                                &code,\n" +
                         "                                &dvmResolver);\n"
                 , dataLength / 2));

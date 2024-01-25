@@ -1,6 +1,8 @@
 package com.nmmedit.apkprotect.andres;
 
-import com.android.aapt.Resources;
+
+import com.android.tools.r8.internal.E;
+import com.nmmedit.apkprotect.ApkFolders;
 import com.nmmedit.apkprotect.util.FileUtils;
 
 import apk.arsc.*;
@@ -8,37 +10,37 @@ import apk.arsc.*;
 import javax.annotation.Nonnull;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.List;
 
 public class AxmlEdit {
 
-    @Nonnull
-    public static String getApplicationName(@Nonnull byte[] manifestBytes) {
-        ResourceFile file = new ResourceFile(manifestBytes);
-        for (Chunk chunk : file.getChunks()) {
-            if (chunk instanceof XmlChunk) {
-                XmlChunk xmlChunk = (XmlChunk) chunk;
-                for (Chunk subChunk : xmlChunk.getChunks().values()) {
-                    if (subChunk instanceof XmlStartElementChunk) {
-                        XmlStartElementChunk startElementChunk = (XmlStartElementChunk) subChunk;
-                        if (startElementChunk.getName().equals("application")) {
-                            return getApplicationName(startElementChunk);
-                        }
-                    }
-                }
-            }
-        }
-        return "";
-    }
+
+//    @Nonnull
+//    public static String getApplicationName(@Nonnull byte[] manifestBytes) {
+//        ResourceFile file = new ResourceFile(manifestBytes);
+//        for (Chunk chunk : file.getChunks()) {
+//            if (chunk instanceof XmlChunk) {
+//                XmlChunk xmlChunk = (XmlChunk) chunk;
+//                for (Chunk subChunk : xmlChunk.getChunks().values()) {
+//                    if (subChunk instanceof XmlStartElementChunk) {
+//                        XmlStartElementChunk startElementChunk = (XmlStartElementChunk) subChunk;
+//                        if (startElementChunk.getName().equals("application")) {
+//                            return getApplicationName(startElementChunk);
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        return "";
+//    }
     @Nonnull
     public static int  getMinSdk(@Nonnull byte[] manifestBytes) {
         ResourceFile file = new ResourceFile(manifestBytes);
         for (Chunk chunk : file.getChunks()) {
-
-
 
             if (chunk instanceof XmlChunk) {
                 XmlChunk xmlChunk = (XmlChunk) chunk;
@@ -65,6 +67,15 @@ public class AxmlEdit {
 
     @Nonnull
     public static String getPackageName(@Nonnull byte[] manifestBytes) {
+//        try {
+//           AxmlEdit.renameApplicationName(manifestBytes, "com.nmmedit.protect.LoadLibApp");
+//
+////            Files.;
+//
+//        }catch (Exception e){
+//            e.printStackTrace();
+//
+//        }
         ResourceFile file = new ResourceFile(manifestBytes);
         for (Chunk chunk : file.getChunks()) {
             if (chunk instanceof XmlChunk) {
@@ -74,6 +85,7 @@ public class AxmlEdit {
                         XmlStartElementChunk startElementChunk = (XmlStartElementChunk) subChunk;
                         if (startElementChunk.getName().equals("manifest")) {
                             for (XmlAttribute attribute : startElementChunk.getAttributes()) {
+
                                 if (attribute.name().equals("package")) {
                                     return attribute.rawValue();
                                 }
@@ -98,8 +110,6 @@ public class AxmlEdit {
     public static byte[] renameApplicationName(@Nonnull byte[] manifestBytes, @Nonnull String newName) throws IOException {
         ResourceFile file = new ResourceFile(manifestBytes);
 
-
-
         boolean modified = false;
         for (Chunk chunk : file.getChunks()) {
             if (chunk instanceof XmlChunk) {
@@ -111,7 +121,6 @@ public class AxmlEdit {
                 for (Chunk subChunk : xmlChunk.getChunks().values()) {
                     if (subChunk instanceof XmlStartElementChunk) {
                         XmlStartElementChunk startElementChunk = (XmlStartElementChunk) subChunk;
-//
                         //todo 可能还需要在<application>节点插入 android:extractNativeLibs="true" 不然本地库无法压缩放入apk
                         if (modifyApplicationName(stringPoolChunk, startElementChunk, newName)) {
                             modified = true;
@@ -122,6 +131,7 @@ public class AxmlEdit {
             }
         }
         if (modified) {
+
             return file.toByteArray(SerializableResource.SHRINK);
         }
         return null;
@@ -143,10 +153,12 @@ public class AxmlEdit {
     }
 
 
+
+
+
     private static boolean modifyApplicationName(@Nonnull StringPoolChunk stringPoolChunk,
                                                  @Nonnull XmlStartElementChunk startElement,
-                                                 @Nonnull String newAppName) {
-
+                                                 @Nonnull String newAppName) throws IOException {
 
         if (startElement.getName().equals("application")) {
             List<XmlAttribute> attributes = startElement.getAttributes();
@@ -160,36 +172,11 @@ public class AxmlEdit {
 
                     startElement.setAttribute(i, newAttr);
 
-
                     return true;
                 }
 
-//                String extractNativeLibs = attribute.name("extractNativeLibs");
-                if (attribute.name().equals("extractNativeLibs")){
-                }
 
-//                android:extractNativeLibs="false"
-                for (XmlAttribute attr:attributes){
-                    if (attr.name().equals("extractNativeLibs")){
-
-                    }
-
-                }
-//                XmlResourceParser xmlResourceParser = Resources.getXml(xmlResourceId);
-//                while (xmlResourceParser.getEventType() != XmlPullParser.END_DOCUMENT) {
-//                    if (xmlResourceParser.getEventType() == XmlPullParser.START_TAG) {
-//                        if (xmlResourceParser.getName().equals("application")) {
-//                            // 检查并修改 android:extractNativeLibs 的值
-//                            String extractNativeLibs = xmlResourceParser.getAttributeValue(null, "extractNativeLibs");
-//                            if (extractNativeLibs != null && extractNativeLibs.equals("false")) {
-//                                xmlResourceParser.getAttributeList().setValue(
-//                                        xmlResourceParser.getAttributeList().getIndex("extractNativeLibs"), "true");
-//                                Log.d(TAG, "Modified android:extractNativeLibs value to true");
-//                            }
-//                        }
-//                    }
-//                    xmlResourceParser.next();
-//                if ()
+//
             }
             //application节点不存在name属性，创建后添加
             XmlAttribute newAttr = createXmlNameAttribute(stringPoolChunk, startElement, newAppName);
@@ -200,10 +187,10 @@ public class AxmlEdit {
                 //name属性在这些属性之后
                 if ("theme".equals(attribute.name())
                         || "label".equals(attribute.name())
-                        || "icon".equals(attribute.name())
-                ) {
+                        || "icon".equals(attribute.name()) ) {
                     nameAttrIndex++;
                 }
+
             }
 
             startElement.addAttribute(nameAttrIndex, newAttr);

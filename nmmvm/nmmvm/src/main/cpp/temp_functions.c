@@ -67,7 +67,7 @@ Java_retrofit2_b_a__Ljava_lang_Object_2Ljava_lang_String_2_Ljava_lang_Object_2(J
             .triesHandlers=tries
     };
 
-    jvalue value = vmInterVVV(env,
+    jvalue value = vmcam(env,
                                &code,
                                &dvmResolver);
     return value.l;

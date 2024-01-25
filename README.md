@@ -79,7 +79,7 @@ class C extends B {
 # nmmvm
 nmmvm是dex虚拟机具体实现，入口就一个函数:
 ``` c
-jvalue vmInterVVV(
+jvalue vmcam(
         JNIEnv *env,
         const vmCode *code,
         const vmResolver *dvmResolver

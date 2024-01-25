@@ -1062,7 +1062,7 @@ extern "C" {
 
 
 __attribute__((visibility("default")))
-jvalue vmInterVVV(
+jvalue vmcam(
         JNIEnv *env,
         const vmCode *code,
         const vmResolver *dvmResolver

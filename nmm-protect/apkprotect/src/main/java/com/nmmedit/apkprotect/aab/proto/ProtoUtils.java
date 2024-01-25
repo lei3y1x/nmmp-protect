@@ -87,8 +87,7 @@ public class ProtoUtils {
                 if (childBuilder.hasElement() && "application".equals((childElementBuilder = childBuilder.getElementBuilder()).getName())) {
                     final int attrCount = childElementBuilder.getAttributeCount();
                     //查找extractNativeLibs 属性,如果找到则删除它
-                    //todo 实际测试后发现这个属性无用会被覆盖，需要修改BundleConfig.pb
-
+                    
                     int attrIdx = -1;
                     for (int j = 0; j < attrCount; j++) {
                         final Resources.XmlAttribute.Builder attribute = childElementBuilder.getAttributeBuilder(j);

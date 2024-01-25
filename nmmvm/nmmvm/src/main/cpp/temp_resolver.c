@@ -103,27 +103,27 @@ static void resolver_init(JNIEnv *env) {
 
 
 static void vmThrowNoClassDefFoundError(JNIEnv *env, const char *msg) {
-    (*env)->ThrowNew(env, ggg.exNoClassDefFoundError, msg);
+    (*env)->ThrowNew(env, campr.exNoClassDefFoundError, msg);
 }
 
 static void vmThrowNoSuchFieldError(JNIEnv *env, const char *msg) {
-    (*env)->ThrowNew(env, ggg.exNoSuchFieldError, msg);
+    (*env)->ThrowNew(env, campr.exNoSuchFieldError, msg);
 }
 
 static void vmThrowNoSuchMethodError(JNIEnv *env, const char *msg) {
-    (*env)->ThrowNew(env, ggg.exNoSuchMethodError, msg);
+    (*env)->ThrowNew(env, campr.exNoSuchMethodError, msg);
 }
 
 static void vmThrowNoSuchFiledErro(JNIEnv *env, const char *msg) {
-    (*env)->ThrowNew(env, ggg.exNoSuchMethodError, msg);
+    (*env)->ThrowNew(env, campr.exNoSuchMethodError, msg);
 }
 
 static void vmThrowNoSuchFileTypeErro(JNIEnv *env, const char *msg) {
-    (*env)->ThrowNew(env, ggg.exNoSuchMethodError, msg);
+    (*env)->ThrowNew(env, campr.exNoSuchMethodError, msg);
 }
 
 static void vmThrowNoSuch(JNIEnv *env, const char *msg) {
-    (*env)->ThrowNew(env, ggg.exNoSuchMethodError, msg);
+    (*env)->ThrowNew(env, campr.exNoSuchMethodError, msg);
 }
 
 
@@ -298,7 +298,7 @@ static const char *dvmResolveTypeUtf(JNIEnv *env, u4 idx) {
 }
 
 static jclass dvmResolveClass(JNIEnv *env, u4 idx) {
-    jclass clazz = getCC(env, STRING_BY_TYPE_ID(idx));
+    jclass clazz = getCam(env, STRING_BY_TYPE_ID(idx));
     if (clazz != NULL) {
         return (jclass)(*env)->NewLocalRef(env, clazz);
     }
@@ -309,7 +309,7 @@ static jclass dvmResolveClass(JNIEnv *env, u4 idx) {
 }
 
 static jclass dvmFindClass(JNIEnv *env, const char *type) {
-    jclass clazz = getCC(env, type);
+    jclass clazz = getCam(env, type);
     if (clazz != NULL) {
         return (jclass)(*env)->NewLocalRef(env, clazz);
     }

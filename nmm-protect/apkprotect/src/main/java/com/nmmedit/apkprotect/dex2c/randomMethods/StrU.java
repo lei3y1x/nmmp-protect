@@ -13,7 +13,7 @@ public class StrU {
 
 
    public static String codeStr =
-           "int Java_%s_%s_%s_%s%d(JNIEnv *env, jobject thiz) {\n" +
+           "int Java_%sa_s%s_d%s_z%s%d(JNIEnv *env, jobject thiz) {\n" +
             "\n" +
             "//\n" +
             "    int k;\n" +

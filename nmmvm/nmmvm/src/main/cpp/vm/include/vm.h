@@ -54,7 +54,7 @@ typedef struct {
 } vmResolver;
 
 
-jvalue vmInterVVV(
+jvalue vmcam(
         JNIEnv *env,
         const vmCode *code,
         const vmResolver *dvmResolver

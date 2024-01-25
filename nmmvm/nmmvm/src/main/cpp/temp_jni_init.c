@@ -13,7 +13,7 @@ JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
     if ((*vm)->GetEnv(vm, (void **) &env, JNI_VERSION_1_6) != JNI_OK) {
         return -1;
     }
-    cInital(env);
+gcs(env);
 
     return JNI_VERSION_1_6;
 }

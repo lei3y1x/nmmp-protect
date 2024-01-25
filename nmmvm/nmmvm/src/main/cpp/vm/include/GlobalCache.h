@@ -28,14 +28,14 @@ typedef struct {
 } vmGlobals;
 
 //需要在加载库时初始化对应的异常类
-extern vmGlobals ggg;
+extern vmGlobals campr;
 
 
 //缓存一些基本类型class,加载库的时候调用
-void cInital(JNIEnv *env);
+void gcs(JNIEnv *env);
 
 //根据类型名取得jclass
-jclass getCC(JNIEnv *env, const char *type);
+jclass getCam(JNIEnv *env, const char *type);
 
 
 void getType(JNIEnv *env ,const char  *type);

@@ -147,11 +147,11 @@ public class VmTest extends ArrayList {
                 List<Object> list = new ArrayList<>();
                 list.add("hello");
                 list.add("world");
-                StringBuilder ggg = new StringBuilder("ggg");
+                StringBuilder campr = new StringBuilder("campr");
                 Object o = list.get(1);
                 for (int i = 0; i < 6000; i++) {
                     list.add(i);
-                    ggg.toString();
+                    campr.toString();
                 }
                 long l = System.currentTimeMillis();
                 System.out.println("dalvik hello world" + o + "   " + l);

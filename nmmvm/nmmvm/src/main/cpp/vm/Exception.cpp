@@ -23,23 +23,23 @@ void dvmThrowExceptionFmtV(JNIEnv *env, const char *name,
 
 
 void dvmThrowArithmeticException(JNIEnv *env, const char *msg) {
-    env->ThrowNew(ggg.exArithmeticException, msg);
+    env->ThrowNew(campr.exArithmeticException, msg);
 }
 
 void dvmThrowInternalError(JNIEnv *env, const char *msg) {
-    env->ThrowNew(ggg.exInternalError, msg);
+    env->ThrowNew(campr.exInternalError, msg);
 }
 
 void dvmThrowArrayIndexOutOfBoundsException(JNIEnv *env, int length, int index) {
     char buf[64];
     snprintf(buf, sizeof(buf), "length=%d; index=%d", length, index);
-    env->ThrowNew(ggg.exArrayIndexOutOfBoundsException, buf);
+    env->ThrowNew(campr.exArrayIndexOutOfBoundsException, buf);
 }
 
 void dvmThrowNegativeArraySizeException(JNIEnv *env, s4 size) {
     char buf[64];
     snprintf(buf, sizeof(buf), "%d", size);
-    env->ThrowNew(ggg.exNegativeArraySizeException, buf);
+    env->ThrowNew(campr.exNegativeArraySizeException, buf);
 }
 
 static jmethodID javaClassGetNameMethod = NULL;
@@ -72,7 +72,7 @@ void dvmThrowClassCastException(JNIEnv *env, jobject jobj, jclass clazz2) {
 
     //todo 觉得获得class名太麻烦,所以消息直接设置为空,可能需要改进
 
-    env->ThrowNew(ggg.exClassCastException, NULL);
+    env->ThrowNew(campr.exClassCastException, NULL);
 
 //    free(name1);
 //    free(name2);
@@ -80,15 +80,15 @@ void dvmThrowClassCastException(JNIEnv *env, jobject jobj, jclass clazz2) {
 
 
 void dvmThrowRuntimeException(JNIEnv *env, const char *msg) {
-    env->ThrowNew(ggg.exRuntimeException, msg);
+    env->ThrowNew(campr.exRuntimeException, msg);
 }
 
 void dvmThrowNullPointerException(JNIEnv *env, const char *msg) {
-    env->ThrowNew(ggg.exNullPointerException, msg);
+    env->ThrowNew(campr.exNullPointerException, msg);
 }
 
 void dvmThrowClassNotFoundException(JNIEnv *env, const char *name) {
-    env->ThrowNew(ggg.exClassNotFoundException, name);
+    env->ThrowNew(campr.exClassNotFoundException, name);
 }
 
 

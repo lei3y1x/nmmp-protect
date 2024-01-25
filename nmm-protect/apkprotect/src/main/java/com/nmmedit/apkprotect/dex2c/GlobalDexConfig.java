@@ -73,7 +73,7 @@ public class GlobalDexConfig {
                         "    if ((*vm)->GetEnv(vm, (void **) &env, JNI_VERSION_1_6) != JNI_OK) {\n" +
                         "        return -1;\n" +
                         "    }\n" +
-                        "    cInital(env);\n" +
+                        "    gcs(env);\n" +
                         "\n" +
                         "\n" +
                         "    //auto generated setup function\n" +

@@ -48,7 +48,6 @@ public class Dex2c {
 
         for (File file : dexFiles) {
             final DexConfig config = handleDex(file, filter, classAnalyzer, instructionRewriter, outDir);
-
             //不需要给外部
             config.setShellMethods(null);
             globalConfig.addDexConfig(config);

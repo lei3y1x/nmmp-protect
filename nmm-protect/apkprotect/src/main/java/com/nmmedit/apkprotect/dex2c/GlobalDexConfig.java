@@ -17,6 +17,7 @@ public class GlobalDexConfig {
 
     private final File outputDir;
 
+
     public GlobalDexConfig(File outputDir) {
         this.outputDir = outputDir;
     }
@@ -38,16 +39,20 @@ public class GlobalDexConfig {
                 final FileWriter writer = new FileWriter(getInitCodeFile());
         ) {
             generateJniInitCode(writer);
-//            int count = (int) (Math.random() * 100);
-//            for (int i = 0; i < count; i++) {
-//                int c = (int) (Math.random() * 200);
-//                StrU.generateRandomReslover(writer, c,RandomMethodUtils.getRandomString(4),configs);
-//            }
+
             generateJniRandom(writer);
 
 
         }
     }
+
+
+
+
+
+
+
+
 
     private void generateJniInitCode(Writer writer) throws IOException {
         final StringBuilder includeStaOrExternFunc = new StringBuilder();
@@ -81,7 +86,9 @@ public class GlobalDexConfig {
                         "\n" +
                         "\n" +
                         "    return JNI_VERSION_1_6;\n" +
-                        "}\n\n\n",
+                        "}\n\n\n" +
+                        "",
+
                 includeStaOrExternFunc.toString(), initCallSta.toString()));
     }
 
@@ -94,16 +101,6 @@ public class GlobalDexConfig {
 
     }
 
-
-//   "CreateFramework(JNIEnv *env, jobject instance, jstring jPackageName)"+" {\n"+
-//        "jint"+ "jRet" +"= "+"JNI_ERR"+";\n"+
-//
-//    "const"+"char"+ "*packageName"+ = env->GetStringUTFChars(jPackageName, 0);
-//
-//
-//        env->ReleaseStringUTFChars(jPackageName, packageName);
-//        return jRet;
-//    }"
 
 
     }

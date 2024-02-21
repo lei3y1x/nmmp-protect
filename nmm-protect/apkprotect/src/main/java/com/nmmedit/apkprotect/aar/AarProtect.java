@@ -2,6 +2,7 @@ package com.nmmedit.apkprotect.aar;
 
 import com.android.tools.r8.D8;
 import com.android.tools.r8.internal.E;
+import com.android.tools.r8.internal.S;
 import com.android.tools.r8.naming.F;
 import com.android.zipflinger.*;
 import com.google.common.collect.HashMultimap;
@@ -25,6 +26,8 @@ import org.objectweb.asm.Opcodes;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.Deflater;
 
 public class AarProtect {
@@ -56,7 +59,9 @@ public class AarProtect {
         try {
             final File classesDex = getClassesDex(dexJar, zipExtractTempDir);
             //处理aar 脱糖
+            //dj dex2jar 路径
             String dj = FileUtils.getHomePath()+"/tools/d2j-dex2jar.sh";
+            //脱糖之后生成jar
             File djar = new File(aarFolders.getTempDir(), "dex.jar");
 
 
@@ -69,17 +74,17 @@ public class AarProtect {
                 int exitCode = process.waitFor();
 
                 if (exitCode == 0) {
-                    System.out.println("AAR 文件中的 JAR 提取成功");
-                    // 进一步处理提取的 JAR 文件
+                    System.out.println("AAR succ");
+//                    // 进一步处理提取的 JAR 文件
 
                     // ...
                 } else {
-                    System.out.println("AAR 文件中的 JAR 提取失败");
-                    // 处理提取失败的情况
-                    // ...
+                    System.out.println("AAR fail");
+//                    // 处理提取失败的情况
+//                    // ...
                 }
 
-                System.out.println("vmsrcFile"+dj+":"+":"+classesDex+classesDex.length()+":"+djar.getAbsolutePath()+djar.length());
+//                System.out.println("vmsrcFile"+dj+":"+":"+classesDex+classesDex.length()+":"+djar.getAbsolutePath()+djar.length());
 
 
 
@@ -153,8 +158,8 @@ public class AarProtect {
 
 
         } finally {
-//            FileUtils.deleteFile(dexJar);
-//            FileUtils.deleteFile(zipExtractTempDir);
+            FileUtils.deleteFile(dexJar);
+            FileUtils.deleteFile(zipExtractTempDir);
         }
 
     }
@@ -219,9 +224,14 @@ public class AarProtect {
             if (methods.isEmpty()) {
                 throw new IllegalStateException();
             }
+
             final Method method = methods.get(0);
+
             final String sig = MyMethodUtil.getMethodSignature(method.getParameterTypes(), method.getReturnType());
             final AsmMethod asmMethod = new AsmMethod(method.getAccessFlags(), method.getName(), sig);
+            System.out.println("sig:"+sig+":methodName:"+method.getName()+methods.size());
+            //匹配方法名方法是否以{开头
+
 
             if (methods.size() == 1) {
                 myMethods.put(asmMethod, Collections.singletonList(asmMethod));
@@ -232,6 +242,8 @@ public class AarProtect {
 
                 myMethods.put(asmMethod, Arrays.asList(asmMethod, asmMethod1));
             }
+            System.out.println("myMethods:"+myMethods.get(asmMethod));
+
         }
         final ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
         final MethodToNativeVisitor methodToNativeVisitor = new MethodToNativeVisitor(Opcodes.ASM9, cw, myMethods);
@@ -253,6 +265,13 @@ public class AarProtect {
                 "x86_64");
     }
 
+
+    private static boolean isPatternMatch(String text, String patternString) {
+        Pattern pattern = Pattern.compile(patternString);
+        Matcher matcher = pattern.matcher(text);
+
+        return matcher.matches();
+    }
 
     private File extractClassJar() throws IOException {
         final File file = new File(aarFolders.getTempDir(), "classes.jar");
@@ -311,27 +330,6 @@ public class AarProtect {
 
 
 
-    private static File getNewJar(File dexJar, File zipExtractDir) throws IOException {
-        if (!zipExtractDir.exists()) zipExtractDir.mkdirs();
-        final File file = new File(zipExtractDir, "new.dex");
-        try (
-
-//                final  InputStream in = dexJar.
-//                final  InputStream is = new FileInputStream(dexJar);
-                final ZipArchive zipArchive = new ZipArchive(dexJar.toPath());
-                final InputStream dex = zipArchive.getInputStream("new.dex");
-                final FileOutputStream out = new FileOutputStream(file);
-
-        ) {
-
-            if (dex == null) {
-                throw new IllegalStateException("No new.dex");
-            }
-//            final  in =
-            FileUtils.copyStream(dex, out);
-        }
-        return file;
-    }
 
 
     public static class Builder {

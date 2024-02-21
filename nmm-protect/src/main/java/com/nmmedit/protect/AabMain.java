@@ -19,6 +19,7 @@ public class AabMain {
         if (args.length < 1) {
             System.err.println("No Input aab.");
             System.err.println("<inAab> [convertRuleFile]");
+
             return;
         }
         final File aab = new File(args[0]);

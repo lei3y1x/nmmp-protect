@@ -1,0 +1,39 @@
+plugins {
+    id 'java'
+}
+
+group 'xhu.spike.fusion'
+version ''
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.github.javaparser:javaparser-core-serialization:3.25.2'
+}
+
+jar {
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+
+    manifest {
+        attributes "Main-Class": "xhu.spike.fusion.Main"
+    }
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+static void runCmd(String cmd) {
+    println(cmd)
+    Runtime.getRuntime().exec(new String[]{"sh", "-c", cmd});
+}
+
+tasks.register('out') {
+    dependsOn(jar)
+    group "action"
+    doFirst {
+        runCmd("cp ~/private/java/fusion/disorder/build/libs/disorder.jar ~/work/fusion/disorder.jar")
+    }
+}
